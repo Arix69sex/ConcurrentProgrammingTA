@@ -7,7 +7,7 @@ import (
 )
 
 func randSleep() {
-	time.Sleep(time.Duration(rand.Intn(8000)+2000) * time.Microsecond)
+	time.Sleep(time.Duration(rand.Intn(15000)+5000) * time.Microsecond)
 }
 
 var visited map[int]bool = make(map[int]bool)
@@ -23,7 +23,6 @@ type Node struct {
 }
 
 func (n *Node) ProcessNode() {
-	fmt.Printf("CS Node %v ⚠️\n", n.key)
 	fmt.Printf("Node %v ❌\n", n.key)
 	randSleep()
 	fmt.Printf("Node %v ✅\n", n.key)
@@ -74,15 +73,16 @@ func (node *Node) DFS() {
 	path = append(path, node.key)
 	for i := 0; i < len(node.adjacent); i++ {
 		fmt.Printf("CS Node %v ⚠️\n", node.key)
-		node.adjacent[i].DFS()
 		node.ProcessNode()
+		node.adjacent[i].DFS()
+		
 	}
 }
 
 func main() {
+	start := time.Now()
 	g := createGraph(5)
 	visited = createVisited(len(g.nodes), visited)
-	fmt.Printf("Visited %v.", visited)
 	g = createPath(0, 1, g)
 	g = createPath(0, 2, g)
 	g = createPath(1, 0, g)
@@ -95,7 +95,8 @@ func main() {
 	g = createPath(3, 4, g)
 	g = createPath(4, 1, g)
 	g = createPath(4, 3, g)
-	g.nodes[0].DFS()
+	g.nodes[3].DFS()
 	fmt.Printf("Path %v.", path)
 	g.Print()
+	fmt.Printf("\nTime elapsed: %v\n\n", time.Since(start))
 }
